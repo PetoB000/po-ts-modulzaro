@@ -3,25 +3,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Participant_1 = require("./models/Participant");
 const EventManager_1 = require("./services/EventManager");
 const EventType_1 = require("./types/EventType");
-// Create event manager
 const eventManager = new EventManager_1.EventManager();
-// Create some events
-const birthdayParty = eventManager.createEvent("John's Birthday", "Central Park", new Date("2024-03-15"), EventType_1.EventType.BIRTHDAY);
-const musicFestival = eventManager.createEvent("Summer Music Fest", "Beach Arena", new Date("2024-07-01"), EventType_1.EventType.FESTIVAL);
-// Create participants
-const alice = new Participant_1.Participant("Alice", "alice@email.com");
-const bob = new Participant_1.Participant("Bob", "bob@email.com");
-const charlie = new Participant_1.Participant("Charlie", "charlie@email.com");
-// Register participants to events
-alice.registerForEvent(birthdayParty);
-bob.registerForEvent(birthdayParty);
-charlie.registerForEvent(musicFestival);
-alice.registerForEvent(musicFestival);
-// Display results
-console.log("Birthday Party Participants:", birthdayParty.getParticipants());
-console.log("Music Festival Participants:", musicFestival.getParticipants());
-console.log("Alice's registered events:", alice.getRegisteredEvents());
-// Test removal
-alice.unregisterFromEvent("John's Birthday");
-console.log("\nAfter Alice unregistered from birthday:");
-console.log("Birthday Party Participants:", birthdayParty.getParticipants());
+const birthdayParty = eventManager.createEvent("valami szülinap", "valahol", new Date("2024-03-15"), EventType_1.EventType.BIRTHDAY);
+const musicFestival = eventManager.createEvent("valami fesztivál", "valahol 2", new Date("2024-07-01"), EventType_1.EventType.FESTIVAL);
+const someone = new Participant_1.Participant("valaki", "valakiemail");
+const someone2 = new Participant_1.Participant("valaki 2", "valakiemail 2");
+const someone3 = new Participant_1.Participant("valaki 3", "valakiemail 3");
+someone.registerForEvent(birthdayParty);
+someone2.registerForEvent(birthdayParty);
+someone3.registerForEvent(musicFestival);
+someone.registerForEvent(musicFestival);
+console.log("szülinapon vannak:", birthdayParty.getParticipants());
+console.log("fesztiválon vannak:", musicFestival.getParticipants());
+console.log("valaki eventjei:", someone.getRegisteredEvents());
+someone.unregisterFromEvent("valami szülinap");
+console.log("\n Valaki kivétele szülinapból:");
+console.log("szülinapon:", birthdayParty.getParticipants());
