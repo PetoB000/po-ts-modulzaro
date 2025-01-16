@@ -9,14 +9,20 @@ export class Event {
         private location: string,
         private time: Date,
         private theme: EventType
-    ) {}
+    ) { }
 
     addParticipant(participant: Participant): void {
         this.participants.set(participant.getName(), participant);
+        participant.registerForEvent(this);
+
     }
 
     removeParticipant(participantName: string): void {
-        this.participants.delete(participantName);
+        const participant = this.participants.get(participantName);
+        if (participant) {
+            participant.unregisterFromEvent(this.name);
+            this.participants.delete(participantName);
+        }
     }
 
     getParticipants(): Participant[] {
