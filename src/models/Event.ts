@@ -11,22 +11,31 @@ export class Event {
         private theme: EventType
     ) { }
 
-    addParticipant(participant: Participant): void {
-        this.participants.set(participant.getName(), participant);
-        participant.registerForEvent(this);
-
+    addParticipant(participant: Participant, skipRegistration: boolean = false): void {
+        if (!this.participants.has(participant.getName())) {
+            this.participants.set(participant.getName(), participant);
+            if (!skipRegistration) {
+                participant.registerForEvent(this, true);
+            }
+        }
     }
 
-    removeParticipant(participantName: string): void {
+    removeParticipant(participantName: string, skipUnregistration: boolean = false): void {
         const participant = this.participants.get(participantName);
         if (participant) {
-            participant.unregisterFromEvent(this.name);
+            if (!skipUnregistration) {
+                participant.unregisterFromEvent(this.name, true);
+            }
             this.participants.delete(participantName);
         }
     }
 
     getParticipants(): Participant[] {
         return Array.from(this.participants.values());
+    }
+
+    getName(): string {
+        return this.name;
     }
 
     getEventDetails() {

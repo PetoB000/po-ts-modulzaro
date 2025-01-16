@@ -13,14 +13,20 @@ class Participant {
     getContactInfo() {
         return this.contactInfo;
     }
-    registerForEvent(event) {
-        this.registeredEvents.set(event.getEventDetails().name, event);
-        event.addParticipant(this);
+    registerForEvent(event, skipAdd = false) {
+        if (!this.registeredEvents.has(event.getName())) {
+            this.registeredEvents.set(event.getName(), event);
+            if (!skipAdd) {
+                event.addParticipant(this, true);
+            }
+        }
     }
-    unregisterFromEvent(eventName) {
+    unregisterFromEvent(eventName, skipRemove = false) {
         const event = this.registeredEvents.get(eventName);
         if (event) {
-            event.removeParticipant(this.name);
+            if (!skipRemove) {
+                event.removeParticipant(this.name, true);
+            }
             this.registeredEvents.delete(eventName);
         }
     }

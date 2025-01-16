@@ -11,20 +11,26 @@ export class Participant {
     getName(): string {
         return this.name;
     }
-    
+
     getContactInfo(): string {
         return this.contactInfo;
     }
 
-    registerForEvent(event: Event): void {
-        this.registeredEvents.set(event.getEventDetails().name, event);
-        event.addParticipant(this);
+    registerForEvent(event: Event, skipAdd: boolean = false): void {
+        if (!this.registeredEvents.has(event.getName())) {
+            this.registeredEvents.set(event.getName(), event);
+            if (!skipAdd) {
+                event.addParticipant(this, true);
+            }
+        }
     }
 
-    unregisterFromEvent(eventName: string): void {
+    unregisterFromEvent(eventName: string, skipRemove: boolean = false): void {
         const event = this.registeredEvents.get(eventName);
         if (event) {
-            event.removeParticipant(this.name);
+            if (!skipRemove) {
+                event.removeParticipant(this.name, true);
+            }
             this.registeredEvents.delete(eventName);
         }
     }

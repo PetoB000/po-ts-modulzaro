@@ -9,19 +9,28 @@ class Event {
         this.theme = theme;
         this.participants = new Map();
     }
-    addParticipant(participant) {
-        this.participants.set(participant.getName(), participant);
-        participant.registerForEvent(this);
+    addParticipant(participant, skipRegistration = false) {
+        if (!this.participants.has(participant.getName())) {
+            this.participants.set(participant.getName(), participant);
+            if (!skipRegistration) {
+                participant.registerForEvent(this, true);
+            }
+        }
     }
-    removeParticipant(participantName) {
+    removeParticipant(participantName, skipUnregistration = false) {
         const participant = this.participants.get(participantName);
         if (participant) {
-            participant.unregisterFromEvent(this.name);
+            if (!skipUnregistration) {
+                participant.unregisterFromEvent(this.name, true);
+            }
             this.participants.delete(participantName);
         }
     }
     getParticipants() {
         return Array.from(this.participants.values());
+    }
+    getName() {
+        return this.name;
     }
     getEventDetails() {
         return {
